@@ -58,13 +58,18 @@ function gemifySelected()
 	span.innerHTML = "Gemifying..."
 	for(var i = 0; i < selected.length; i++)
 	{
+		setTimeout(doGoo(i), 1000);
+		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
+	}
+}
+
+function doGoo(i)
+{
 		GrindIntoGooNoMess(267420, 6, selected[i].substring(7));
-		if(i == selected.length - 1)
+		if(i == (selected.length - 1))
 		{
 			location.reload();
 		}
-		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
-	}
 }
 
 function GrindIntoGooNoMess( appid, contextid, itemid )
