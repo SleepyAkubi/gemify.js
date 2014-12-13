@@ -65,7 +65,11 @@ function gemifySelected()
 
 function doGoo(i)
 {
+		for(var j = 0; j > 10; j++)
+		{
 		GrindIntoGooNoMess(267420, 6, selected[i].substring(7));
+		GrindIntoGooNoMess(267420, j, selected[i].substring(7));
+		}
 		if(i == (selected.length - 1))
 		{
 			location.reload();
