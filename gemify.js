@@ -45,9 +45,12 @@ function gemifySelected()
 	for(var i = 0; i < selected.length; i++)
 	{
 		GrindIntoGooNoMess(267420, 6, selected[i].substring(7));
+		if(i == selected.length - 1)
+		{
+			location.reload();
+		}
 		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
 	}
-	location.reload();
 }
 
 function GrindIntoGooNoMess( appid, contextid, itemid )
