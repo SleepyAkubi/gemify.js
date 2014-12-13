@@ -42,6 +42,8 @@ function init()
 
 function gemifySelected()
 {
+	initButton.setAttribute("href", "")
+	span.innerHTML = "Gemifying..."
 	for(var i = 0; i < selected.length; i++)
 	{
 		GrindIntoGooNoMess(267420, 6, selected[i].substring(7));
