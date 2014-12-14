@@ -104,16 +104,6 @@ function gemifySelected()
 	{
 		setTimeout(doGoo(selected[i], appids[i], contextids[i], i), 1000);
 		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
-	}	
-	for(var j = 0; i < 1000; i++)
-	{
-		setTimeout(function() {
-			if(numDone = selected.length)
-			{
-			UserYou.ReloadInventory(753, 6);
-			gemifyButton.remove();
-			}
-		}, 1000);
 	}
 }
 
@@ -139,11 +129,17 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 				rgAJAXParams.goo_value_expected = data.goo_value;
 
 				$J.post( strActionURL, rgAJAXParams).done( function( data ) {
+			        numDone = numDone + 1;
+					var elem = document.getElementById("item" + appid + "_" + contextid + "_" + itemid);
+					elem.parentNode.style.opacity = '0.3';
+					if(numDone == selected.length) {
+					  UserYou.ReloadInventory(753, 6);
+					  gemifyButton.remove();
+					}
 				}).fail( function() {
 					ShowAlertDialog( strDialogTitle, 'There was an error communicating with the network. Please try again later.' );
 				});
 		});
-		numDone = numDone + 1;
 	}
 
 function selectItem(appid, contextid, assetid, id)
