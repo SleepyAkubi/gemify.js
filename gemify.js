@@ -55,6 +55,13 @@ function Button(colour, text, onclick, place)
 	{
 		initButton.setAttribute("href", "javascript:" + clickFunc + "();");
 	}	
+	this.remove = function()
+	{
+		buttonHolder.parentNode.removeChild(buttonHolder);
+		initButton.parentNode.removeChild(initButton);
+		iBDiv.parentNode.removeChild(iBDiv);
+		span.parentNode.removeChild(span);
+	}
 }
 
 gemifyButton = new Button("green", "Gemify Multiple", "init", "filter_ctn inventory_filters")
@@ -103,7 +110,8 @@ function gemifySelected()
 		setTimeout(function() {
 			if(numDone = selected.length)
 			{
-			location.reload();
+			UserYou.ReloadInventory(753, 6);
+			gemifyButton.remove();
 			}
 		}, 1000);
 	}
