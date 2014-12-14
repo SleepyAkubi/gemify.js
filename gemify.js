@@ -11,6 +11,9 @@ You may use this software commercially.
 */
 
 var selected = [];
+var appids = [];
+var contextids = [];
+
 var id = 0;
 
 var buttonHolder = document.createElement('div')
@@ -43,13 +46,22 @@ function init()
 
 	var buttons = document.getElementsByClassName("inventory_item_link")
 	for (var i = 0; i < buttons.length; i++)
-	{
-		var orig = buttons[i].getAttribute("href")
-		buttons[i].setAttribute("id", id)
-		buttons[i].setAttribute("onclick", "selectItem(\"" + orig + "\", " + id + ")")
-		id = id + 1;
-
+	{	
+		setTimeout(setupLoop(i, buttons), 1000);
 	}
+}
+
+function setupLoop(i, buttons)
+{
+	var orig = buttons[i].getAttribute("href")
+	if(orig.substring(0, 7) ==  "#753_6_")
+	{
+			buttons[i].setAttribute("id", id)
+			item = ReadInventoryHash( orig )
+
+			buttons[i].setAttribute("onclick", "selectItem(\"" + item.appid + "\", " + item.contextid + ", " + item.assetid + ", " + id + ")")
+			id = id + 1;
+		}
 }
 
 function gemifySelected()
@@ -58,19 +70,19 @@ function gemifySelected()
 	span.innerHTML = "Gemifying..."
 	for(var i = 0; i < selected.length; i++)
 	{
-		setTimeout(doGoo(i), 1000);
+		setTimeout(doGoo(selected[i], appids[i], contextids[i], i), 1000);
 		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
 	}
 }
 
-function doGoo(i)
+function doGoo(assetid, appid, contextid, i)
 {
-		for(var j = 0; j > 10; j++)
+		GrindIntoGooNoMess(appid, contextid, assetid);
+		if(selected.length == 0)
 		{
-		GrindIntoGooNoMess(267420, 6, selected[i].substring(7));
-		GrindIntoGooNoMess(267420, j, selected[i].substring(7));
+			location.reload();
 		}
-		if(i == (selected.length - 1))
+		if(i == (selected.length - 1) )
 		{
 			location.reload();
 		}
@@ -99,26 +111,28 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 		});
 	}
 
-function selectItem(originalTag, id)
+function selectItem(appid, contextid, assetid, id)
 {
 	var button = document.getElementById(id);
 	button.parentNode.parentNode.style.boxSizing = 'border-box';
 
-	if(originalTag.substring(0, 7) !=  "#753_6_")
-	{
-		return false;
-	}
 	for(var i = 0; i < selected.length; i++)
 	{
-		if(selected[i] == originalTag)
+		if(selected[i] == assetid)
 		{
 			var index = selected.indexOf(i);
 			selected.splice(index, 1);
+			appids.splice(index, 1);
+			contextids.splice(index, 1);
+
+
 			button.parentNode.parentNode.style.border = '';
 			return false;
 		}
 	}
-	selected.push(originalTag)
+	selected.push(assetid)
+	contextids.push(contextid)
+	appids.push(appid)
 	button.parentNode.parentNode.style.border = '2px dashed red'
 }
 
