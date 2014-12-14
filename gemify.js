@@ -16,32 +16,52 @@ var contextids = [];
 
 var id = 0;
 
-var buttonHolder = document.createElement('div')
-buttonHolder.className = "flipthis-wrapper"
+function Button(colour, text, onclick, place)
+{
+	var buttonHolder = document.createElement('div')
+	buttonHolder.className = "flipthis-wrapper"
 
-var initButton = document.createElement('a');
+	var initButton = document.createElement('a');
 
-initButton.setAttribute("href", "javascript:init()")
+	initButton.setAttribute("href", "javascript:" + onclick + "()")
 
-iBDiv = document.createElement('div');
-iBDiv.className = "btn_small btn_green_white_innerfade";
+	iBDiv = document.createElement('div');
 
-span = document.createElement('span')
-span.innerHTML = "Gemify Multiple"
-span.className = "";
-iBDiv.appendChild(span);
+	if (colour = "green")
+	{
+	iBDiv.className = "btn_small btn_green_white_innerfade";
+	} else {
+		iBDiv.className = "btn_small btn_grey_white_innerfade";
+	}
 
-initButton.appendChild(iBDiv);
+	span = document.createElement('span')
+	span.innerHTML = text
+	span.className = "";
+	iBDiv.appendChild(span);
 
-buttonHolder.appendChild(initButton)
+	initButton.appendChild(iBDiv);
 
-var row = document.getElementsByClassName("filter_ctn inventory_filters")
-row[0].appendChild(buttonHolder)
+	buttonHolder.appendChild(initButton)
+
+	var row = document.getElementsByClassName(place)
+	row[0].appendChild(buttonHolder)
+
+	this.setText = function(newText)
+	{
+		span.innerHTML = newText
+	}	
+	this.setClick = function(clickFunc)
+	{
+		initButton.setAttribute("href", "javascript:" + clickFunc + "();");
+	}	
+}
+
+gemifyButton = new Button("green", "Gemify Multiple", "init", "filter_ctn inventory_filters")
 
 function init()
 {
-	span.innerHTML = "Gemify Selections"
-	initButton.setAttribute("href", "javascript:gemifySelected()")
+	gemifyButton.setText("Gemify Selections")
+	gemifyButton.setClick("gemifySelected")
 
 	var buttons = document.getElementsByClassName("inventory_item_link")
 	for (var i = 0; i < buttons.length; i++)
@@ -65,14 +85,13 @@ function setupLoop(i, buttons)
 
 function gemifySelected()
 {
-	initButton.setAttribute("href", "")
-
+	gemifyButton.setClick("void")
+	gemifyButton.setText("Gemifying...");
 	if(selected.length == 0)
 	{
 		location.reload();
 	}
 
-	span.innerHTML = "Gemifying..."
 	for(var i = 0; i < selected.length; i++)
 	{
 		setTimeout(doGoo(selected[i], appids[i], contextids[i], i), 1000);
