@@ -22,10 +22,9 @@ buttonHolder.className = "flipthis-wrapper"
 var initButton = document.createElement('a');
 
 initButton.setAttribute("href", "javascript:init()")
-initButton.className = "btn_small btn_green_white_innerfade";
 
 iBDiv = document.createElement('div');
-iBDiv.className = "flipthis-wrapper"
+iBDiv.className = "btn_small btn_green_white_innerfade";
 
 span = document.createElement('span')
 span.innerHTML = "Gemify Multiple"
@@ -67,25 +66,24 @@ function setupLoop(i, buttons)
 function gemifySelected()
 {
 	initButton.setAttribute("href", "")
+
+	if(selected.length == 0)
+	{
+		location.reload();
+	}
+
 	span.innerHTML = "Gemifying..."
 	for(var i = 0; i < selected.length; i++)
 	{
 		setTimeout(doGoo(selected[i], appids[i], contextids[i], i), 1000);
 		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
 	}
+	location.reload();
 }
 
 function doGoo(assetid, appid, contextid, i)
 {
-		GrindIntoGooNoMess(appid, contextid, assetid);
-		if(selected.length == 0)
-		{
-			location.reload();
-		}
-		if(i == (selected.length - 1) )
-		{
-			location.reload();
-		}
+	GrindIntoGooNoMess(appid, contextid, assetid);
 }
 
 function GrindIntoGooNoMess( appid, contextid, itemid )
