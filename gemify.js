@@ -7,6 +7,10 @@ You may redistribute this software.
 You may not sell this software.
 You may edit this software providing you give credit to the original.
 You may use this software commercially.
+You must include this notice in all versions of the software if edited.
+
+Special thanks to contributor:
+* srabouin 
 
 */
 
