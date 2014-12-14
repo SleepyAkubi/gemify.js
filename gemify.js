@@ -13,6 +13,7 @@ You may use this software commercially.
 var selected = [];
 var appids = [];
 var contextids = [];
+var numDone = 0;
 
 var id = 0;
 
@@ -96,8 +97,16 @@ function gemifySelected()
 	{
 		setTimeout(doGoo(selected[i], appids[i], contextids[i], i), 1000);
 		//console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
+	}	
+	for(var j = 0; i < 1000; i++)
+	{
+		setTimeout(function() {
+			if(numDone = selected.length)
+			{
+			location.reload();
+			}
+		}, 1000);
 	}
-	location.reload();
 }
 
 function doGoo(assetid, appid, contextid, i)
@@ -126,6 +135,7 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 					ShowAlertDialog( strDialogTitle, 'There was an error communicating with the network. Please try again later.' );
 				});
 		});
+		numDone = numDone + 1;
 	}
 
 function selectItem(appid, contextid, assetid, id)
