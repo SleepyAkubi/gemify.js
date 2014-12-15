@@ -23,83 +23,78 @@ var id = 0;
 
 function Button(colour, text, onclick, place)
 {
-	var buttonHolder = document.createElement('div')
-	buttonHolder.className = "flipthis-wrapper"
+	var buttonHolder = document.createElement('div');
+	buttonHolder.className = "flipthis-wrapper";
 
 	var initButton = document.createElement('a');
 
-	initButton.setAttribute("href", "javascript:" + onclick + "()")
+	initButton.setAttribute("href", "javascript:" + onclick + "()");
 
 	iBDiv = document.createElement('div');
 
-	if (colour = "green")
-	{
-	iBDiv.className = "btn_small btn_green_white_innerfade";
+	if (colour == "green") {
+		iBDiv.className = "btn_small btn_green_white_innerfade";
 	} else {
 		iBDiv.className = "btn_small btn_grey_white_innerfade";
 	}
 
-	span = document.createElement('span')
-	span.innerHTML = text
+	span = document.createElement('span');
+	span.innerHTML = text;
 	span.className = "";
 	iBDiv.appendChild(span);
 
 	initButton.appendChild(iBDiv);
 
-	buttonHolder.appendChild(initButton)
+	buttonHolder.appendChild(initButton);
 
-	var row = document.getElementsByClassName(place)
-	row[0].appendChild(buttonHolder)
+	var row = document.getElementsByClassName(place);
+	row[0].appendChild(buttonHolder);
 
-	this.setText = function(newText)
-	{
-		span.innerHTML = newText
-	}	
-	this.setClick = function(clickFunc)
-	{
+	this.setText = function(newText) {
+		span.innerHTML = newText;
+	};
+	this.setClick = function(clickFunc) {
 		initButton.setAttribute("href", "javascript:" + clickFunc + "();");
-	}	
-	this.remove = function()
-	{
+	};	
+	this.remove = function() {
 		buttonHolder.parentNode.removeChild(buttonHolder);
 		initButton.parentNode.removeChild(initButton);
 		iBDiv.parentNode.removeChild(iBDiv);
 		span.parentNode.removeChild(span);
-	}
+	};
 }
 
-gemifyButton = new Button("green", "Gemify Multiple", "init", "filter_ctn inventory_filters")
+gemifyButton = new Button("green", "Gemify Multiple", "init", "filter_ctn inventory_filters");
 
 function init()
 {
-	gemifyButton.setText("Gemify Selections")
-	gemifyButton.setClick("gemifySelected")
+	gemifyButton.setText("Gemify Selections");
+	gemifyButton.setClick("gemifySelected");
 
-	var buttons = document.getElementsByClassName("inventory_item_link")
-	for (var i = 0; i < buttons.length; i++)
-	{	
+	var buttons = document.getElementsByClassName("inventory_item_link");
+	for (var i = 0; i < buttons.length; i++) {	
 		setTimeout(setupLoop(i, buttons), 1000);
 	}
 }
 
 function setupLoop(i, buttons)
 {
-	var orig = buttons[i].getAttribute("href")
+	var orig = buttons[i].getAttribute("href");
 	if(orig.substring(0, 7) ==  "#753_6_")
 	{
-			buttons[i].setAttribute("id", id)
-			item = ReadInventoryHash( orig )
+			buttons[i].setAttribute("id", id);
+			item = ReadInventoryHash( orig );
 
-			buttons[i].setAttribute("onclick", "selectItem(\"" + item.appid + "\", " + item.contextid + ", " + item.assetid + ", " + id + ")")
+			buttons[i].setAttribute("onclick", "selectItem(\"" + item.appid + "\", " + item.contextid + ", " + item.assetid + ", " + id + ")");
 			id = id + 1;
 		}
 }
 
 function gemifySelected()
 {
-	gemifyButton.setClick("void")
+	gemifyButton.setClick("void");
 	gemifyButton.setText("Gemifying...");
-	if(selected.length == 0)
+	if(selected.length === 0)
 	{
 		location.reload();
 	}
@@ -141,8 +136,10 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 					  gemifyButton.remove();
 					}
 				}).fail( function() {
-					ShowAlertDialog( strDialogTitle, 'There was an error communicating with the network. Please try again later.' );
+					setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
 				});
+		}).fail( function() {
+			setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
 		});
 	}
 
@@ -165,10 +162,10 @@ function selectItem(appid, contextid, assetid, id)
 			return false;
 		}
 	}
-	selected.push(assetid)
-	contextids.push(contextid)
-	appids.push(appid)
-	button.parentNode.parentNode.style.border = '2px dashed red'
+	selected.push(assetid);
+	contextids.push(contextid);
+	appids.push(appid);
+	button.parentNode.parentNode.style.border = '2px dashed red';
 }
 
 function getAllElementsWithAttribute(attribute)
