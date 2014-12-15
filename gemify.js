@@ -74,7 +74,7 @@ introMsg +=    "<p><strong>Instructions:</strong></p>";
 introMsg +=    "<p>1. Press the \'Gemify Multiple\' button, to start the selection process.</p>";
 introMsg +=    "<p>2. Select the items you wish (the selected items will be highlighted in a <strong style=\'color: red\'>red</strong> border).</p>";
 introMsg +=    "<p>3. Press the \'Gemify Selections\' button</p>";
-introMsg +=    "<p>4. Wait for it to refresh your inventory (or error, either or here)</p>";
+introMsg +=    "<p>4. Wait for it to refresh your inventory (or error)</p>";
 introMsg +=    "<p>5. ???\n";
 introMsg +=    "<p>6. PROFIT! (possibly quite literally depending on your case)</p></br>";
 
