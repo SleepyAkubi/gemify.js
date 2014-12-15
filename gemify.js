@@ -18,6 +18,7 @@ var selected = [];
 var appids = [];
 var contextids = [];
 var numDone = 0;
+var errCount = 0;
 
 var id = 0;
 
@@ -65,6 +66,24 @@ function Button(colour, text, onclick, place)
 }
 
 gemifyButton = new Button("green", "Gemify Multiple", "init", "filter_ctn inventory_filters");
+
+var introMsg = "<h2>Welcome to gemify.js</h2>";
+introMsg +=    "<h1>gemify.js is a script to aid in the gemification of items.</h1><br>";
+
+introMsg +=    "<p><strong>Instructions:</strong></p>";
+introMsg +=    "<p>1. Press the \'Gemify Multiple\' button, to start the selection process.</p>";
+introMsg +=    "<p>2. Select the items you wish (the selected items will be highlighted in a <strong style=\'color: red\'>red</strong> border).</p>";
+introMsg +=    "<p>3. Press the \'Gemify Selections\' button</p>";
+introMsg +=    "<p>4. Wait for it to refresh your inventory (or error, either or here)</p>";
+introMsg +=    "<p>5. ???\n";
+introMsg +=    "<p>6. PROFIT! (possibly quite literally depending on your case)</p></br>";
+
+introMsg +=    "<p>I hope you enjoy using gemify.js. Have a great Christmas\n";
+introMsg +=    "<p>-Boncey and the pull request people";
+
+
+
+ShowAlertDialog( "gemify.js", introMsg );
 
 function init()
 {
@@ -136,10 +155,21 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 					  gemifyButton.remove();
 					}
 				}).fail( function() {
-					setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
+					if(errCount > 4){
+					ShowAlertDialog( strDialogTitle, 'There was an error connecting to the network after attempting 5 times!' );
+					} else {
+						setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
+					}
+					errCount = errCount + 1;
 				});
 		}).fail( function() {
 			setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
+			if(errCount > 4){
+				ShowAlertDialog( strDialogTitle, 'There was an error connecting to the network after attempting 5 times!' );
+			} else {
+				setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
+			}
+			errCount = errCount + 1;
 		});
 	}
 
