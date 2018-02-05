@@ -2,16 +2,13 @@
 ©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©
 COPYRIGHT 2014 - THE WARP DIMENSION STUDIOS
 ©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©©
-
 You may redistribute this software.
 You may not sell this software.
 You may edit this software providing you give credit to the original.
 You may use this software commercially.
 You must include this notice in all versions of the software if edited.
-
 Special thanks to contributor:
 * srabouin 
-
 */
 
 var selected = [], appids = [], contextids = [], numDone = 0, errCount = [], id = 0, introMsg =
@@ -131,21 +128,23 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 			assetid: itemid,
 			contextid: contextid
 		};
-		var strActionURL = g_strProfileURL + "/ajaxgetgoovalue/";
 
-		$J.get( strActionURL, rgAJAXParams ).done( function( data ) {
+		var getGooParams =  get_goo_params(appid, contextid, itemid);
+		var strActionURL = "http://steamcommunity.com/auction/ajaxgetgoovalueforitemtype/";
+
+		$J.get( strActionURL, getGooParams).done( function( data ) {
 			var $Content = $J(data.strHTML);
 			var strDialogTitle = data.strTitle;
 				strActionURL = g_strProfileURL + "/ajaxgrindintogoo/";
 				rgAJAXParams.goo_value_expected = data.goo_value;
 
 				$J.post( strActionURL, rgAJAXParams).done( function( data ) {
-			        numDone = numDone + 1;
-					var elem = document.getElementById("item" + appid + "_" + contextid + "_" + itemid);
+					numDone = numDone + 1;
+					var elem = document.getElementById(appid + "_" + contextid + "_" + itemid);
 					elem.parentNode.style.opacity = '0.3';
 					if(numDone == selected.length) {
-					  UserYou.ReloadInventory(753, 6);
-					  gemifyButton.remove();
+						UserYou.ReloadInventory(753, 6);
+						gemifyButton.remove();
 					}
 				}).fail( function() {
 					if(errCount[itemid] > 4){
@@ -165,6 +164,23 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 			++errCount[itemid];
 		});
 	}
+
+function get_goo_params(appid, contextid, assetid) 
+{
+	var actions = UserYou.rgContexts[appid][contextid].inventory.m_rgAssets[assetid].description.owner_actions;
+
+	actions = actions.filter(function(obj) {
+		return (obj.link && obj.link.includes("GooValue"));
+	})
+
+	if(actions.length > 0) {
+		var link_url_params = actions[0].link.split(",");
+		return {
+			appid: parseInt(link_url_params[2]),
+			item_type: parseInt(link_url_params[3])
+		};
+	}
+}
 
 function selectItem(appid, contextid, assetid, id)
 {
