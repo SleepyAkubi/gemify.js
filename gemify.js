@@ -141,7 +141,7 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 
 				$J.post( strActionURL, rgAJAXParams).done( function( data ) {
 			        numDone = numDone + 1;
-					var elem = document.getElementById("item" + appid + "_" + contextid + "_" + itemid);
+					var elem = document.getElementById("753_" + contextid + "_" + itemid);
 					elem.parentNode.style.opacity = '0.3';
 					if(numDone == selected.length) {
 					  UserYou.ReloadInventory(753, 6);
