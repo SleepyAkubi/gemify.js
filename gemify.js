@@ -187,7 +187,7 @@ function selectItem(appid, contextid, assetid, id)
 	}
 	selected.push(assetid);
 	contextids.push(contextid);
-	appids.push(appid);
+	appids.push((g_ActiveInventory.selectedItem.description.market_hash_name.match(/^([0-9]+)-/) || [])[1]);
 	button.parentNode.parentNode.style.border = '2px dashed red';
 }
 
