@@ -23,11 +23,9 @@ var selected = [], appids = [], contextids = [], numDone = 0, errCount = [], id 
 <p>2. Select the items you wish (the selected items will be highlighted in a <strong style=\'color: red\'>red</strong> border).</p>\n\
 <p>3. Press the \'Gemify Selections\' button</p>\n\
 <p>4. Wait for it to refresh your inventory (or error)</p>\n\
-<p>5. ???</p>\n\
-<p>6. PROFIT! (possibly quite literally depending on your case)</p></br>\n\
 \n\
-<p>I hope you enjoy using gemify.js. Have a great Christmas</p>\n\
-<p>Boncey and the pull request people</p>";
+<p>I hope you enjoy using gemify.js.</p>\n\
+<p>Boncey and the pull request people; script repaired by Xxmarijnw</p>";
 
 function Button(colour, text, onclick, place)
 {
@@ -141,7 +139,7 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 
 				$J.post( strActionURL, rgAJAXParams).done( function( data ) {
 			        numDone = numDone + 1;
-					var elem = document.getElementById("item" + appid + "_" + contextid + "_" + itemid);
+					var elem = document.getElementById("753_" + contextid + "_" + itemid);
 					elem.parentNode.style.opacity = '0.3';
 					if(numDone == selected.length) {
 					  UserYou.ReloadInventory(753, 6);
@@ -187,7 +185,7 @@ function selectItem(appid, contextid, assetid, id)
 	}
 	selected.push(assetid);
 	contextids.push(contextid);
-	appids.push(appid);
+	appids.push((g_ActiveInventory.selectedItem.description.market_hash_name.match(/^([0-9]+)-/) || [])[1]);
 	button.parentNode.parentNode.style.border = '2px dashed red';
 }
 
