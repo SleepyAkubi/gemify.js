@@ -23,11 +23,9 @@ var selected = [], appids = [], contextids = [], numDone = 0, errCount = [], id 
 <p>2. Select the items you wish (the selected items will be highlighted in a <strong style=\'color: red\'>red</strong> border).</p>\n\
 <p>3. Press the \'Gemify Selections\' button</p>\n\
 <p>4. Wait for it to refresh your inventory (or error)</p>\n\
-<p>5. ???</p>\n\
-<p>6. PROFIT! (possibly quite literally depending on your case)</p></br>\n\
 \n\
-<p>I hope you enjoy using gemify.js. Have a great Christmas</p>\n\
-<p>Boncey and the pull request people</p>";
+<p>I hope you enjoy using gemify.js.</p>\n\
+<p>Boncey and the pull request people; script repaired by Xxmarijnw</p>";
 
 function Button(colour, text, onclick, place)
 {
