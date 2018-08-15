@@ -25,7 +25,7 @@ var selected = [], appids = [], contextids = [], numDone = 0, errCount = [], id 
 <p>4. Wait for it to refresh your inventory (or error)</p>\n\
 \n\
 <p>I hope you enjoy using gemify.js.</p>\n\
-<p>Boncey and the pull request people; script repaired by Xxmarijnw</p>";
+<p>Boncey and the pull request people.</p>";
 
 function Button(colour, text, onclick, place)
 {
