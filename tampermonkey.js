@@ -132,14 +132,8 @@
 
         for(var i = 0; i < selected.length; i++)
         {
-            setTimeout(doGoo(selected[i], appids[i], contextids[i], i), 1000);
-            //console.log("GrindIntoGoo(267420, 6," + "\'" + selected[i].substring(7) + "\');")
+            setTimeout(GrindIntoGooNoMess(appids[i], contextids[i], selected[i]), 1000);
         }
-    }
-
-    function doGoo(assetid, appid, contextid, i)
-    {
-        GrindIntoGooNoMess(appid, contextid, assetid);
     }
 
     function GrindIntoGooNoMess( appid, contextid, itemid )
