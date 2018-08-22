@@ -79,7 +79,7 @@
         var clicked = 0;
         $J(".gemifySelect").click(function() {
             if(clicked == 0) {
-                init();
+                gemifyButton.setText("Gemify Selections");
                 clicked = 1;
             } else if(clicked == 1) {
                 gemifySelected();
@@ -89,51 +89,51 @@
 
         $J(".item").click(function() {
             var orig = $J(this).find("a").attr("href");
+
             if(orig.substring(0, 7) == "#753_6_")
             {
                 var item = ReadInventoryHash( orig );
 
-                var appid = item.appid;
                 var contextid = item.contextid;
                 var assetid = item.assetid;
                 var id = $J(this).find("a").attr("id");
 
-                selectItem(appid, contextid, assetid, id);
+                for(var i = 0; i < selected.length; i++) {
+                    if(selected[i] == assetid) {
+                        var index = selected.indexOf(i);
+                        selected.splice(index, 1);
+                        appids.splice(index, 1);
+                        contextids.splice(index, 1);
+
+                        this.parentNode.style.border = '';
+                        this.parentNode.style.boxSizing = '';
+
+                        return false;
+                    }
+                }
+
+                selected.push(assetid);
+                contextids.push(contextid);
+                appids.push((g_ActiveInventory.selectedItem.description.market_hash_name.match(/^([0-9]+)-/) || [])[1]);
+
+                this.parentNode.style.boxSizing = 'border-box';
+                this.parentNode.style.border = '2px dashed red';
             }
         });
 
-        function init()
-        {
-            gemifyButton.setText("Gemify Selections");
-
-            var buttons = document.getElementsByClassName("inventory_item_link");
-            for (var i = 0; i < buttons.length; i++) {
-                setTimeout(setupLoop(i, buttons), 1000);
-            }
-        }
-
-        function setupLoop(i, buttons)
-        {
-            var orig = buttons[i].getAttribute("href");
-            if(orig.substring(0, 7) == "#753_6_")
-            {
-                buttons[i].setAttribute("id", id);
-                id = id + 1;
-            }
-        }
-
         function gemifySelected()
         {
-            gemifyButton.setClass("void");
+            gemifyButton.setClass("gemifying");
             gemifyButton.setText("Gemifying...");
             if(selected.length === 0)
             {
-                location.reload();
+                gemifyButton.setText("Nothing to gemify");
+                throw new Error("Empty selected array");
             }
 
             for(var i = 0; i < selected.length; i++)
             {
-                setTimeout(GrindIntoGooNoMess(appids[i], contextids[i], selected[i]), 1000);
+                setTimeout(GrindIntoGooNoMess(appids[i], contextids[i], selected[i]), 500);
             }
         }
 
@@ -162,63 +162,22 @@
                         gemifyButton.remove();
                     }
                 }).fail( function() {
-                    if(errCount[itemid] > 4){
-                        ShowAlertDialog( strDialogTitle, 'There was an error connecting to the network after attempting 5 times!' );
+                    if(errCount[itemid] > 10){
+                        ShowAlertDialog( strDialogTitle, 'There was an error connecting to the network after attempting 10 times!' );
                     } else {
-                        setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
+                        setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 500);
                     }
                     ++errCount[itemid];
                 });
             }).fail( function() {
-                setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
-                if(errCount[itemid] > 4){
-                    ShowAlertDialog( strDialogTitle, 'There was an error connecting to the network after attempting 5 times!' );
+                setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 500);
+                if(errCount[itemid] > 10){
+                    ShowAlertDialog( strDialogTitle, 'There was an error connecting to the network after attempting 10 times!' );
                 } else {
-                    setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
+                    setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 500);
                 }
                 ++errCount[itemid];
             });
-        }
-
-        function selectItem(appid, contextid, assetid, id)
-        {
-            var button = document.getElementById(id);
-            button.parentNode.parentNode.style.boxSizing = 'border-box';
-
-            for(var i = 0; i < selected.length; i++)
-            {
-                if(selected[i] == assetid)
-                {
-                    var index = selected.indexOf(i);
-                    selected.splice(index, 1);
-                    appids.splice(index, 1);
-                    contextids.splice(index, 1);
-
-
-                    button.parentNode.parentNode.style.border = '';
-                    return false;
-                }
-            }
-
-            selected.push(assetid);
-            contextids.push(contextid);
-            appids.push((g_ActiveInventory.selectedItem.description.market_hash_name.match(/^([0-9]+)-/) || [])[1]);
-            button.parentNode.parentNode.style.border = '2px dashed red';
-        }
-
-        function getAllElementsWithAttribute(attribute)
-        {
-            var matchingElements = [];
-            var allElements = document.getElementsByTagName('*');
-            for (var i = 0, n = allElements.length; i < n; i++)
-            {
-                if (allElements[i].getAttribute(attribute))
-                {
-                    // Element exists with attribute. Add to array.
-                    matchingElements.push(allElements[i]);
-                }
-            }
-            return matchingElements;
         }
     }
 })();
