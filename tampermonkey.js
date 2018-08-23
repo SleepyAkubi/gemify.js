@@ -88,36 +88,38 @@
         });
 
         $J(".item").click(function() {
-            var orig = $J(this).find("a").attr("href");
+            if(clicked === 1) {
+                var orig = $J(this).find("a").attr("href");
 
-            if(orig.substring(0, 7) == "#753_6_")
-            {
-                var item = ReadInventoryHash( orig );
+                if(orig.substring(0, 7) == "#753_6_")
+                {
+                    var item = ReadInventoryHash( orig );
 
-                var contextid = item.contextid;
-                var assetid = item.assetid;
-                var id = $J(this).find("a").attr("id");
+                    var contextid = item.contextid;
+                    var assetid = item.assetid;
+                    var id = $J(this).find("a").attr("id");
 
-                for(var i = 0; i < selected.length; i++) {
-                    if(selected[i] == assetid) {
-                        var index = selected.indexOf(i);
-                        selected.splice(index, 1);
-                        appids.splice(index, 1);
-                        contextids.splice(index, 1);
+                    for(var i = 0; i < selected.length; i++) {
+                        if(selected[i] == assetid) {
+                            var index = selected.indexOf(i);
+                            selected.splice(index, 1);
+                            appids.splice(index, 1);
+                            contextids.splice(index, 1);
 
-                        this.parentNode.style.border = '';
-                        this.parentNode.style.boxSizing = '';
+                            this.parentNode.style.border = '';
+                            this.parentNode.style.boxSizing = '';
 
-                        return false;
+                            return false;
+                        }
                     }
+
+                    selected.push(assetid);
+                    contextids.push(contextid);
+                    appids.push((g_ActiveInventory.selectedItem.description.market_hash_name.match(/^([0-9]+)-/) || [])[1]);
+
+                    this.parentNode.style.boxSizing = 'border-box';
+                    this.parentNode.style.border = '2px dashed red';
                 }
-
-                selected.push(assetid);
-                contextids.push(contextid);
-                appids.push((g_ActiveInventory.selectedItem.description.market_hash_name.match(/^([0-9]+)-/) || [])[1]);
-
-                this.parentNode.style.boxSizing = 'border-box';
-                this.parentNode.style.border = '2px dashed red';
             }
         });
 
