@@ -125,23 +125,62 @@ function doGoo(assetid, appid, contextid, i)
 
 function GrindIntoGooNoMess( appid, contextid, itemid )
 	{
+		var item = UserYou.getInventory( appid, contextid );
+		for ( var key1 in item.m_rgAssets ) {
+			if ( item.m_rgAssets[key1].assetid == itemid ) {
+				for ( var key2 in item.m_rgDescriptions ) {
+					if(item.m_rgDescriptions[key2].instanceid == 0) continue;
+
+					if ( item.m_rgDescriptions[key2].instanceid == item.m_rgAssets[key1].instanceid &&
+						item.m_rgDescriptions[key2].classid == item.m_rgAssets[key1].classid ) {
+						var description = item.m_rgDescriptions[key2];
+						/* description.market_fee_app */
+						for ( var key3 in item.m_rgDescriptions[key2].owner_actions ) {
+							
+							if ( item.m_rgDescriptions[key2].owner_actions[key3].link.match( /^javascript:GetGooValue/ ) ) {
+								
+								link = item.m_rgDescriptions[key2].owner_actions[key3].link;
+								var rgMatches = link.match( /GetGooValue\( *'?([^']+)'? *, *'?([^']+)'? *, *'?([0-9]+)'? *, *'?([0-9]+)'? *, *'?([0-9]+)'?/ );
+								if ( rgMatches ) {
+									var new_appid = rgMatches[3];
+									var item_type = rgMatches[4];
+									var border_color = rgMatches[5];
+								}
+								break;
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+
 		var rgAJAXParams = {
-			sessionid: g_sessionID,
-			appid: appid,
-			assetid: itemid,
-			contextid: contextid
+			appid: new_appid,
+			item_type: item_type,
+			border_color: border_color
 		};
-		var strActionURL = g_strProfileURL + "/ajaxgetgoovalue/";
+
+		var strActionURL = "https://steamcommunity.com/auction/ajaxgetgoovalueforitemtype/";
 
 		$J.get( strActionURL, rgAJAXParams ).done( function( data ) {
 			var $Content = $J(data.strHTML);
 			var strDialogTitle = data.strTitle;
 				strActionURL = g_strProfileURL + "/ajaxgrindintogoo/";
-				rgAJAXParams.goo_value_expected = data.goo_value;
+				var goo_value_expected = data.goo_value;
 
-				$J.post( strActionURL, rgAJAXParams).done( function( data ) {
+			if(goo_value_expected > 0) {
+				var rgNEWParams = {
+					sessionid: g_sessionID,
+					appid: appid,
+					assetid: itemid,
+					contextid: contextid,
+					goo_value_expected: data.goo_value
+				};
+
+				$J.post( strActionURL, rgNEWParams).done( function( data ) {
 			        numDone = numDone + 1;
-					var elem = document.getElementById("item" + appid + "_" + contextid + "_" + itemid);
+					var elem = document.getElementById(appid + "_" + contextid + "_" + itemid);
 					elem.parentNode.style.opacity = '0.3';
 					if(numDone == selected.length) {
 					  UserYou.ReloadInventory(753, 6);
@@ -155,6 +194,7 @@ function GrindIntoGooNoMess( appid, contextid, itemid )
 					}
 					++errCount[itemid];
 				});
+			}
 		}).fail( function() {
 			setTimeout(GrindIntoGooNoMess(appid, contextid, itemid), 1000);
 			if(errCount[itemid] > 4){
